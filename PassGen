@@ -1,0 +1,54 @@
+#!/usr/bin/env python -w
+#
+#
+import sys,os,time
+os.system('rm Pass.lst')
+os.system('clear')
+E = raw_input('Input a num or Symbol: ')
+if len(E) !=  0:
+	M = E
+else:
+	M =  '@'
+Pass_list = open('Pass.lst','a');
+def Capital(Text):
+	global Pass_list
+	Keys=[M,2,'123','143']
+	for key in Keys:
+		if key is '@':
+			Pass_list.write('%s%s\n'%(Text.upper(),key))
+		if key != '@':
+			Pass_list.write('%s%d\n'%(Text.upper(),int(key))) 
+
+def lower(Text):
+	global Pass_list
+	Keys=[M,2,'123','143']
+	for key in Keys:
+		if key is '@':
+			Pass_list.write('%s%s\n'%(Text.lower(),key))
+		if key != '@':
+			Pass_list.write('%s%d\n'%(Text.lower(),int(key))) 
+
+
+def Mixed(Text):
+	global Pass_list
+	F = Text.title()
+		
+	Keys=[M,2,'123','143']
+	for key in Keys:
+		if key is '@':
+			Pass_list.write('%s%s\n'%(F,key))
+		if key != '@':
+			Pass_list.write('%s%d\n'%(F,int(key))) 
+
+
+
+os.system('clear')
+name = str(raw_input('Enter First name: '));time.sleep(0.7)
+
+
+
+if len(name) != 0:
+	Mixed(name)
+	lower(name)
+	Capital(name)
+	os.system('clear');print'[+] Done'
