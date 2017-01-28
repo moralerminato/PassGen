@@ -6,8 +6,8 @@ import os
 
 class Generator(object):
   def __init__(self,first,last):
-    self.first = first
-    self.last  = last
+    self.first = first.strip()
+    self.last  = last.strip()
     
   def Modify(self,text):
     for num in range(999):
