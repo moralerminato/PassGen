@@ -19,19 +19,19 @@ class Generator(object):
      self.Write('{}{}'.format(text,num))      
  
   def Generator(self):
-    if len(self.first)+1 >= 8:
-     self.Modify(self.first)
-    else: 
-     print 'First name is less than 8 chars'
+    #if len(self.first)+1 >= 8:
+    self.Modify(self.first)
+    #else: 
+     #print 'First name is less than 8 chars'
 
-    if len(self.last)+1 >= 8:
-     self.Modify(self.last)
-    else: 
-     print 'Last name is less than 8 chars'
+    #if len(self.last)+1 >= 8:
+    self.Modify(self.last)
+    #else: 
+     #print 'Last name is less than 8 chars'
 
-    if len(self.first) + len(self.last)+1 >= 8:
-     self.Modify('{}{}'.format(self.first,self.last))
-     self.Modify('{}{}'.format(self.last,self.first)) 
+    #if len(self.first) + len(self.last)+1 >= 8:
+    self.Modify('{}{}'.format(self.first,self.last))
+    self.Modify('{}{}'.format(self.last,self.first)) 
 
     first = self.first.title()
     last  = self.last.title()
