@@ -2,41 +2,48 @@
 #
 #  Generate Possible Passwords
 # 
-import os
 
 class Generator(object):
- def __init__(self,first,last):
-  self.first = first.strip()
-  self.last  = last.strip()
-    
- def Modify(self,text):
-  for num in range(999):
-   self.Write('{}{}'.format(text.title(),num))    
-   self.Write('{}{}'.format(text.upper(),num))
-   self.Write('{}{}'.format(text.lower(),num))      
+ def __init__(self,name):
+  self.name  = self.filter(name)
+  self.keys  = []
+  self.nums  = [1,2,3,4,5,6,7,12,34,69,123,143,420]
+  self.com   = ['mustang','dragon','baseball','football',
+                'money','monkey','shadow','master','soccer','jordan','love',
+ 'iloveyou','iloveU','mylove']
+  self.list  = ''
  
- def Generator(self):
-  self.Modify(self.first)
-  self.Modify(self.last)
-  self.Modify('{}{}'.format(self.first,self.last))
-  self.Modify('{}{}'.format(self.last,self.first)) 
+ def toFile(self):
+  with open('Pass.lst','w+') as file:
+   file.write(self.list)
 
-  first = self.first.title()
-  last  = self.last.title()
-  for num in range(999):
-   self.Write('{}{}{}'.format(first,last,num))
-   self.Write('{}{}{}'.format(last,first,num))  
-      
- def Write(self,text):
-  word = '{}\n'.format(text)
-  with open('Pass.lst','a') as WriteFile:
-   WriteFile.write(word)
+ def filter(self,text):
+  return text.replace('\n','')
+
+ def read(self):
+  for passwrd in self.keys:
+   yield '{}\n'.format(passwrd) 
+
+ def generate(self,text,num):  
+  self.keys.append('{}{}'.format(text.lower(),num))
+  self.keys.append('{}{}'.format(text.title(),num)) 
+  #
+  self.keys.append('{}.{}'.format(text.lower(),num))  
+  self.keys.append('{}.{}'.format(text.title(),num))
+    
+ def ai(self):
+  for num in self.nums:
+   self.generate(self.name,num)
+  
+  for text in self.com:
+   self.keys.append('{}'.format(text))
+   for num in self.nums:
+    self.generate(text,num)
+
+  for key in self.read():
+   self.list=self.list+key
+  self.toFile() 
 
 if __name__ == '__main__':
- items = [item for item in os.listdir('.')]
- if 'Pass.lst' in items:
-  os.system('rm Pass.lst')
-
- fname = raw_input('Enter first name: ')
- lname = raw_input('Enter last name:  ')
- Generator(fname,lname).Generator()
+ name = raw_input('Enter name: ')
+ Generator(name).ai()
