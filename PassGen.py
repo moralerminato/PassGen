@@ -8,11 +8,9 @@ class Generator(object):
   self.name  = self.filter(name)
   self.keys  = []
   self.list  = ''
-  self.nums  = [1,2,3,4,5,6,7,12,24,34,69,123,143,420]
-  self.com   = ['mustang','dragon','baseball','football',
-                'money','monkey','shadow','master','soccer',
-                'jordan','love','iloveyou','iloveU','mylove']
- 
+  self.nums  = [123,1234,143,1,2,3,69,6969,420,111,123456,321,'!@#','!','@','#']
+  self.com   = ['shadow','love','iloveyou','iloveU','password','p@ssword','p@ssw0rd','admin']
+  
  def toFile(self):
   with open('Pass.lst','w+') as file:
    file.write(self.list)
