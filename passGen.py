@@ -6,7 +6,6 @@
 import os
 import sys
 import time
-import signal
 import urllib2
 import subprocess
 
@@ -59,9 +58,6 @@ class Update(object):
   with open(sys.argv[0],'w') as fwrite:
    fwrite.write(self.html)
   
-  # exit the program
-  os.kill(os.getpid(),signal.SIGKILL)
-
 class Generator(object):
  def __init__(self):
   self.list  = [] # holds numbers, don't mix with numbers or symbols
