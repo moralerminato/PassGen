@@ -6,6 +6,7 @@
 import os
 import sys
 import time
+import signal
 import urllib2
 import subprocess
 
@@ -53,12 +54,13 @@ class Update(object):
    else:
     subprocess.call(['clear'])
     raw_input('No updates found\n\n[Press Enter To Continue]')
-  # os.remove(self.file)
-  # exit()
-
+  
  def update(self):
   with open(sys.argv[0],'w') as fwrite:
    fwrite.write(self.html)
+  
+  # exit the program
+  os.kill(os.getpid(),signal.SIGTERM)
 
 class Generator(object):
  def __init__(self):
