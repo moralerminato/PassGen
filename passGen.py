@@ -270,7 +270,7 @@ def main():
   else:
    # check for key words, such as help, reset, and generate
    cmd = cmd.lower()
-   [answers.cmds() if cmd=='help' else answers.reset() if cmd=='reset' else answers.mklist() if cmd=='generate' else exit() if cmd=='exit' else Update().check() if cmd=='update' else Nonex]
+   [answers.cmds() if cmd=='help' else answers.reset() if cmd=='reset' else answers.mklist() if cmd=='generate' else exit() if cmd=='exit' else Update().check() if cmd=='update' else None]
 
    # reset field
    cmd = cmd.split()
