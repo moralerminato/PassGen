@@ -49,7 +49,7 @@ class Update(object):
       try:
        if eval(line[2]) > self.vers:
         subprocess.call(['clear'])
-        update = raw_input('Updates found, would you like to install it?\n\nEnter (y/n): ')
+        update = raw_input('Found an update, would you like to install it?\n\nEnter (y/n): ')
         if update:
          if update[0].lower() == 'y':self.update()
          return
