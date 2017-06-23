@@ -10,7 +10,7 @@ import signal
 import urllib2
 import subprocess
 
-# version control
+# current version
 __version__ = 1.0
 
 class Update(object):
@@ -60,7 +60,7 @@ class Update(object):
    fwrite.write(self.html)
   
   # exit the program
-  os.kill(os.getpid(),signal.SIGTERM)
+  os.kill(os.getpid(),signal.SIGKILL)
 
 class Generator(object):
  def __init__(self):
