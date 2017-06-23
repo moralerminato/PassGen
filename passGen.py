@@ -10,18 +10,22 @@ import urllib2
 import subprocess
 
 # current version
-__version__ = 1.0
+__version__ = 0.1
 
 class Update(object):
  def __init__(self):
-  self.version = __version__
+  self.vers = __version__
   self.html = None # src code
   self.file = '.code.txt' # hidden file for reading for updates
-  self.code = 'https://raw.githubusercontent.com/Ethical-H4CK3R/PassGen/master/passGen.py' 
+  self.code = 'https://raw.githubusercontent.com/Ethical-H4CK3R/PassGen/master/passGen.py'
 
  def check(self):
-  print 'checking for an update ...'
-  self.open()
+  print 'Checking for an update ...'
+  try:self.open()
+  except:
+   subprocess.call(['clear'])
+   raw_input('Unable to update, please check your connection\n\n[Press Enter To Continue]')
+   return
   self.fetch()
   self.read()
   self.remove()
@@ -43,7 +47,7 @@ class Update(object):
     if line:
      if line[0] == '__version__':
       try:
-       if eval(line[2]) > self.version:
+       if eval(line[2]) > self.vers:
         subprocess.call(['clear'])
         update = raw_input('Updates found, would you like to install it?\n\nEnter (y/n): ')
         if update:
@@ -53,11 +57,13 @@ class Update(object):
    else:
     subprocess.call(['clear'])
     raw_input('No updates found\n\n[Press Enter To Continue]')
-  
+
  def update(self):
   with open(sys.argv[0],'w') as fwrite:
    fwrite.write(self.html)
-  
+  subprocess.call(['clear'])
+  raw_input('Restart program to install updates\n\n[Press Enter To Continue]')
+
 class Generator(object):
  def __init__(self):
   self.list  = [] # holds numbers, don't mix with numbers or symbols
