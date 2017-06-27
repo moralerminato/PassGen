@@ -77,8 +77,9 @@ class Generator(object):
   return time.strftime('%m-%d-%Y_%I:%M:%S',time.localtime())
 
  def leet(self,word):
-  conv = lambda item: str(self.l33t[item.lower()]) if item.lower() in self.l33t else item
-  return [case for case in self.cases(''.join([conv(item) for item in word]))]
+  locations = [ndex for ndex,letter in enumerate(word) if letter.lower() in self.l33t]
+  leets = [''.join([str(self.l33t[letter.lower()]) if letter.lower() in self.l33t and ndex == num else letter for ndex,letter in enumerate(word)]) for num in locations]
+  return [case for _leet in leets for case in self.cases(_leet)]
 
  def cases(self,word):
   # firstname, Firstname, FIRSTNAME
@@ -109,8 +110,12 @@ class Generator(object):
   self.file = self.list if self.list else self.file
   for word in self.word:
    # generate passwords
+   leet = self.leet(word)
    self.file.append(word)
-   self.file = self.file + [leet for leet in self.leet(word)] # leet style
+   self.file = self.file + [_leet for _leet in leet] # leet style
+   self.file = self.file + list(set([num for _leet in leet for num in self.numbers(_leet)])) # leet with number
+   self.file = self.file + list(set([sym for _leet in leet for sym in self.symbols(_leet)])) # leet with symbols
+   self.file = self.file + list(set([comb for _leet in leet for comb in self.comb(_leet)])) # leet with num & symbols
    self.file = self.file + [num for num in self.numbers(word) if not num in self.file] # comb between word & numbers
    self.file = self.file + [sym for sym in self.symbols(word) if not sym in self.file] # comb between word & symbols
    self.file = self.file + [comb for comb in self.comb(word) if not comb in self.file] # comb between word, numbers, & symbols
@@ -120,7 +125,6 @@ class Questions(object):
  def __init__(self):
   self.vends = ['TG1','DVW','DG8','U10','TC8']
   self.questions = {
-            #    0:{'name':'anniversary','value':None}, # anniversary date
                0:{'name':'spousename','value':None},
                1:{'name':'middlename','value':None},
                2:{'name':'childname','value':None},
@@ -130,7 +134,7 @@ class Questions(object):
                6:{'name':'maidename','value':None},
                7:{'name':'lastname','value':None},
                8:{'name':'nickname','value':None},
-               9:{'name':'childYearOB','value':None}, # child year of birth
+               9:{'name':'childYearOB','value':None},
                10:{'name':'surname','value':None},
                11:{'name':'petname','value':None},
                12:{'name':'phone','value':None},
@@ -138,7 +142,6 @@ class Questions(object):
                14:{'name':'bssid','value':None},
                15:{'name':'ssn','value':None},
                16:{'name':'pin','value':None},
-            #    18:{'name':'dob','value':None} # date of birth
               }
 
  def cmds(self):
