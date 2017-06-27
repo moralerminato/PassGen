@@ -109,7 +109,6 @@ class Generator(object):
  def generate(self):
   print 'please wait ...'
   self.file = self.list if self.list else self.file
-  wifi = answers.wifi
   for word in self.word:
    # generate passwords
    leet = self.leet(word)
@@ -121,15 +120,10 @@ class Generator(object):
    self.file = self.file + [num for num in self.numbers(word) if not num in self.file] # comb between word & numbers
    self.file = self.file + [sym for sym in self.symbols(word) if not sym in self.file] # comb between word & symbols
    self.file = self.file + [comb for comb in self.comb(word) if not comb in self.file] # comb between word, numbers, & symbols
-  if wifi:
-   for password in self.file:
-    if len(password)<8:
-     del self.file[self.file.index(password)]
   self.writefile()
 
 class Questions(object):
  def __init__(self):
-  self.wifi = None
   self.vends = ['TG1','DVW','DG8','U10','TC8']
   self.questions = {
                0:{'name':'spousename','value':None},
@@ -148,7 +142,7 @@ class Questions(object):
                13:{'name':'essid','value':None},
                14:{'name':'bssid','value':None},
                15:{'name':'ssn','value':None},
-               16:{'name':'pin','value':None},
+               16:{'name':'pin','value':None}
               }
 
  def cmds(self):
@@ -188,7 +182,6 @@ class Questions(object):
       # generate default password
       if len(essid)>3:
        if essid[:3] in self.vends:
-        self.wifi = True
         passkey = generator.default(essid,bssid)
         if not passkey in generator.list:
          generator.list.append(passkey)
@@ -196,6 +189,7 @@ class Questions(object):
     # full name
     elif n == 'firstname':
      firstname,lastname = v,[self.questions[key]['value'] for key in self.questions if self.questions[key]['name']=='lastname'][0]
+     generator.word.append(firstname)
 
      if lastname:
       generator.word.append('{}{}'.format(firstname,lastname.lower()))
