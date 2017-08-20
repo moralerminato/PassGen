@@ -10,7 +10,7 @@ import urllib2
 import subprocess
 
 # current version
-__version__ = 0.3
+__version__ = 0.31
 
 class Update(object):
  def __init__(self):
@@ -201,8 +201,8 @@ class Generator(object):
   self.symb  = ['!@#','!','@','#','!!!']
   self.nums  = [123,1234,143,1,2,3,69,6969,420,111,123456,321,12,23,24,34,2468]
 
- def now(self):
-  return time.strftime('%m-%d-%Y_%I:%M:%S',time.localtime())
+ # def now(self):
+ #  return time.strftime('%m-%d-%Y_%I:%M:%S',time.localtime())
 
  def cases(self,word):
   # firstname, Firstname, FIRSTNAME
@@ -225,7 +225,7 @@ class Generator(object):
   return '{}{}{}'.format(essid[:-2],''.join([k for i,k in enumerate(bssid) if any([i==9,i==10,i==12,i==13])]),essid[-2:])
 
  def writefile(self):
-  self.name = 'wordlist-{}.lst'.format(self.now())
+  # self.name = 'wordlist-{}.lst'.format(self.now())
   with open(self.name,'w') as fwrite:
    for item in self.file:
     fwrite.write('{}\n'.format(item))
@@ -242,6 +242,8 @@ class Generator(object):
    self.file = self.file + [sym for sym in self.symbols(word) if not sym in self.file] # words & symbols
    self.file = self.file + [comb for comb in self.comb(word) if not comb in self.file] # words, numbers, & symbols
   if len(self.file):
+   self.name = raw_input('[-] Enter a name for the wordlist: ')
+   if not self.name.strip():return
    self.writefile()
 
 class PassGen(Handler,Update):
