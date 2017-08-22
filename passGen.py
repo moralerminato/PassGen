@@ -3,6 +3,7 @@
 # Description: Generates possible passwords
 #
 #
+
 import time
 import shutil
 import zipfile
@@ -10,7 +11,7 @@ import urllib2
 import subprocess
 
 # current version
-__version__ = 0.31
+__version__ = 0.32
 
 class Update(object):
  def __init__(self):
@@ -81,25 +82,25 @@ class Handler(object):
             'middlename':None,
             'lastname':None,
             'nickname':None,
-            'yearOfBirth':None,
+            # 'yearOfBirth':None,
 
             # child info
             'childFN':None,
             'childMN':None,
             'childLN':None,
-            'childYOB':None,
+            # 'childYOB':None,
             'childNN':None,
 
             # spouse info
             'spouseFN':None,
             'spouseMN':None,
             'spouseLN':None,
-            'spouseYOB':None,
+            # 'spouseYOB':None,
             'spouseNN':None,
 
             # pet info
             'petname':None,
-            'petYOB':None,
+            # 'petYOB':None,
 
             # numbers
             'ssn':None,
@@ -156,7 +157,7 @@ class Handler(object):
      self.generator.word.append('mylove{}'.format(v))
      self.generator.word.append('{}143'.format(v))
 
-    # are we looking basic info
+    # are we looking at basic info
     else:
      if v.isdigit():
       if any([n=='yearOfBirth',n=='spouseYOB',n=='childYOB','petYOB']):
@@ -198,31 +199,26 @@ class Generator(object):
   self.list  = [] # holds numbers, don't mix with numbers or symbols
   self.word  = [] # holds words, mix with numbers and symbols
   self.file  = [] # the passwords to write
-  self.symb  = ['!@#','!','@','#','!!!']
-  self.nums  = [123,1234,143,1,2,3,69,6969,420,111,123456,321,12,23,24,34,2468]
+  self.nums  = range(10000)
 
  # def now(self):
  #  return time.strftime('%m-%d-%Y_%I:%M:%S',time.localtime())
 
  def cases(self,word):
-  # firstname, Firstname, FIRSTNAME
-  return word.lower(),word,word.upper()
+  # firstname, Firstname
+  return word.lower(),word.title()
 
  def numbers(self,word):
-  # firstname123
-  return ['{}{}'.format(''.join(word),num) for word in self.cases(word) for num in self.nums]
-
- def symbols(self,word):
-  # firstname!@#
-  return ['{}{}'.format(''.join(word),sym) for word in self.cases(word) for sym in self.symb]
-
- def comb(self,word):
-  # firstname123!@#
-  return ['{}{}{}'.format(''.join(word),num,sym) for word in self.cases(word) for num in self.nums for sym in self.symb]
+  self.file.append(word.lower())
+  self.file.append(word.title())
+  for num in self.nums:
+   for case in self.cases(word):
+    self.file.append('{}{}'.format(''.join(case),num))
 
  def default(self,essid,bssid):
   # default passkey on routers
-  return '{}{}{}'.format(essid[:-2],''.join([k for i,k in enumerate(bssid) if any([i==9,i==10,i==12,i==13])]),essid[-2:])
+  return '{}{}{}'.format(essid[:-2],''.join([k for i,k in enumerate(bssid)\
+  if any([i==9,i==10,i==12,i==13])]),essid[-2:])
 
  def writefile(self):
   # self.name = 'wordlist-{}.lst'.format(self.now())
@@ -231,19 +227,23 @@ class Generator(object):
     fwrite.write('{}\n'.format(item))
 
  def generate(self):
+  print 'Generating ...'
+  time.sleep(1.5)
   [self.file.append(_) for _ in self.list if _]
+  map(self.numbers,self.word)
   if len(self.file):
-   print 'Generating ...'
-   time.sleep(1.5)
-  for word in self.word:
-   # generate passwords
-   self.file.append(word)
-   self.file = self.file + [num for num in self.numbers(word) if not num in self.file] # words & numbers
-   self.file = self.file + [sym for sym in self.symbols(word) if not sym in self.file] # words & symbols
-   self.file = self.file + [comb for comb in self.comb(word) if not comb in self.file] # words, numbers, & symbols
-  if len(self.file):
-   self.name = raw_input('[-] Enter a name for the wordlist: ')
-   if not self.name.strip():return
+   while 1:
+    # try:
+     subprocess.call(['clear'])
+     self.name = raw_input('[-] Enter a name for the wordlist: ')
+     # if not self.name.strip():return
+     if shutil.os.path.exists(self.name):
+      opt = raw_input('\n[!] {} already exists, override it? [Y/n]: '.\
+      format(self.name))
+      if opt:
+       if opt.lower()[0] == 'y':break
+     else:break
+    # except:return
    self.writefile()
 
 class PassGen(Handler,Update):
@@ -266,7 +266,8 @@ class PassGen(Handler,Update):
     print '||    Name     ||    Value   ||'
     print '-------------------------------'
    n,v = q.ljust(11),self.questions[q]
-   v = '{}{}{}'.format(self.r,str(v).rjust(7),self.n) if not v else '{}{}{}'.format(self.b,v.rjust(len(str(v))+3),self.n)
+   v = '{}{}{}'.format(self.r,str(v).rjust(7),self.n) if not v else\
+   '{}{}{}'.format(self.b,v.rjust(len(str(v))+3),self.n)
    print '|| {} || {}'.format(n,v)
   passwords = len(self.generator.file)
   if passwords:
@@ -325,7 +326,8 @@ class PassGen(Handler,Update):
     # check for key words, such as help, reset, and generate
     cmd = cmd.lower()
     [self._help() if cmd=='help' else self.reset() if cmd=='reset' else \
-     self.mklist() if cmd=='generate' else exit() if cmd=='exit' else self.update() if cmd=='update' else None]
+     self.mklist() if cmd=='generate' else exit() if cmd=='exit' else\
+     self.update() if cmd=='update' else None]
 
 if __name__ == '__main__':
  try:PassGen().run()
