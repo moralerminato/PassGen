@@ -230,7 +230,7 @@ class Generator(object):
   print 'Generating ...'
   time.sleep(1.5)
   [self.file.append(_) for _ in self.list if _]
-  map(self.numbers,self.word)
+  [self.numbers(word) for word in self.word]
   if len(self.file):
    while 1:
     # try:
