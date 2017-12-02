@@ -61,12 +61,16 @@ class Update(object):
 
   # extract
   for item in os.listdir(fldr):
-   item = fldr + os.path.sep + item
-   destin = self.path + os.path.sep + os.path.basename(item)
+   try:
+    item = fldr + os.path.sep + item
+    destin = self.path + os.path.sep + os.path.basename(item)
 
-   # move
-   if os.path.isfile(item):shutil.copyfile(item, destin)
-   else:shutil.copytree(item, destin)
+    # move
+    if os.path.isfile(item):shutil.copyfile(item, destin)
+    else:
+     if os.path.exists(destin):shutil.rmtree(destin)
+     shutil.copytree(item, destin)
+   except:pass 
 
   # remove
   shutil.rmtree(os.path.splitext(self.dir)[0])
