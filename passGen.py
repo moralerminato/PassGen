@@ -2,7 +2,8 @@
 # Author: Ethical-H4CK3R
 # Description: Generates Possible Passwords
 
-from os import path
+from os import getcwd, path
+from platform import system
 from src.update import Update
 from src.console import Console
 from src.generate import Generator
@@ -15,7 +16,7 @@ class PassGen(Update, Console, Generator):
  def __init__(self):
   self.version = __version__
   super(PassGen, self).__init__()
-  self.path = path.dirname(__file__)
+  self.path = path.dirname(__file__) if system() == 'Windows' else getcwd()
 
  def create(self):
   size = self.passwords.qsize()
