@@ -17,6 +17,5 @@ class Queue(object):
 
  def get(self):
   if not self.queue:return
-  item = self.queue[0]
-  del self.queue[0]
-  return item
+  return self.queue.pop(0)
+  
