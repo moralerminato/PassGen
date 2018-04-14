@@ -1,0 +1,5 @@
+cd Desktop
+ git clone
+ cd instashell
+ chmod +x instashell.sh
+ ./instashell.sh
